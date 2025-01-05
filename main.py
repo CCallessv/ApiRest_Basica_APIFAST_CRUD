@@ -22,7 +22,12 @@ db = []
 
 #READ
 @app.get("/cursos/", response_model=List[Curso])
-def obtener_cursos():
+def obtener_cursos(id: Optional[str] = None):
+    if id:
+        curso = next((curso for curso in db if curso.id == id), None)
+        if curso is None:
+            raise HTTPException(status_code=404, detail="Curso no encontrado")
+        return [curso]
     return db
 
 #CREATE
